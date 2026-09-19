@@ -9,6 +9,7 @@ const DraggableTaskCard = ({
   onDelete,
   onStartPomodoro,
   onQuickComplete,
+  onSelectTask,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
@@ -27,7 +28,7 @@ const DraggableTaskCard = ({
       <div
         {...listeners}
         {...attributes}
-        className="absolute top-2 right-2 w-6 h-6 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity bg-gray-200/80 rounded-full flex items-center justify-center text-xs font-bold text-gray-600 z-10"
+        className="absolute top-1.5 right-1.5 w-5 h-5 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity bg-gray-200/80 rounded-full flex items-center justify-center text-[10px] font-bold text-gray-600 z-10"
         title="Kéo để di chuyển mốc thời gian"
       >
         ::
@@ -39,9 +40,12 @@ const DraggableTaskCard = ({
         onDelete={onDelete}
         onStartPomodoro={onStartPomodoro}
         onQuickComplete={onQuickComplete}
+        onSelectTask={onSelectTask}
+        compact={true}
       />
     </div>
   );
 };
+
 
 export default DraggableTaskCard;

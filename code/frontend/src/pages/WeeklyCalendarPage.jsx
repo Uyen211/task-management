@@ -13,6 +13,7 @@ import WeeklyCalendarGrid from '../components/WeeklyCalendarGrid';
 import EditTaskModal from '../components/EditTaskModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import PomodoroTimerModal from '../components/PomodoroTimerModal';
+import TaskDetailModal from '../components/TaskDetailModal';
 import { 
   getWeeklyCalendar, 
   dragDropTask, 
@@ -35,10 +36,12 @@ const WeeklyCalendarPage = ({ onOpenCreateTask, topics = [] }) => {
   const [error, setError] = useState(null);
 
   // Modals state
+  const [selectedDetailTask, setSelectedDetailTask] = useState(null);
   const [editingTask, setEditingTask] = useState(null);
   const [deletingTask, setDeletingTask] = useState(null);
   const [activePomodoroSession, setActivePomodoroSession] = useState(null);
   const [activePomodoroTask, setActivePomodoroTask] = useState(null);
+
 
   // Fetch weekly calendar data
   const fetchWeeklyCalendar = useCallback(async () => {
@@ -274,10 +277,21 @@ const WeeklyCalendarPage = ({ onOpenCreateTask, topics = [] }) => {
           onAddTaskOnDate={(date) => {
             onOpenCreateTask && onOpenCreateTask(date);
           }}
+          onSelectTask={(task) => setSelectedDetailTask(task)}
         />
       )}
 
       {/* Embedded Modals */}
+      <TaskDetailModal
+        isOpen={Boolean(selectedDetailTask)}
+        onClose={() => setSelectedDetailTask(null)}
+        task={selectedDetailTask}
+        onEdit={(task) => setEditingTask(task)}
+        onDelete={(task) => setDeletingTask(task)}
+        onStartPomodoro={handleStartPomodoro}
+        onQuickComplete={handleQuickCompleteTask}
+      />
+
       <EditTaskModal
         isOpen={Boolean(editingTask)}
         onClose={() => setEditingTask(null)}
@@ -315,5 +329,6 @@ const WeeklyCalendarPage = ({ onOpenCreateTask, topics = [] }) => {
     </div>
   );
 };
+
 
 export default WeeklyCalendarPage;

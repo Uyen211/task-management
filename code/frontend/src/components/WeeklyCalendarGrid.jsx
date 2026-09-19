@@ -17,6 +17,7 @@ const WeeklyCalendarGrid = ({
   onStartPomodoro,
   onQuickCompleteTask,
   onAddTaskOnDate,
+  onSelectTask,
 }) => {
   const [activeTask, setActiveTask] = React.useState(null);
 
@@ -75,8 +76,10 @@ const WeeklyCalendarGrid = ({
             onStartPomodoro={onStartPomodoro}
             onQuickCompleteTask={onQuickCompleteTask}
             onAddTaskOnDate={onAddTaskOnDate}
+            onSelectTask={onSelectTask}
           />
         ))}
+
       </div>
 
       <DragOverlay>

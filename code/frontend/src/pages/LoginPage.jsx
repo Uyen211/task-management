@@ -23,7 +23,14 @@ const LoginPage = () => {
     } catch (err) {
       console.error(err);
       if (err.response && err.response.data && err.response.data.detail) {
-        setError(err.response.data.detail);
+        const detail = err.response.data.detail;
+        if (typeof detail === 'string') {
+          setError(detail);
+        } else if (Array.isArray(detail)) {
+          setError(detail.map((item) => item.msg).join(', '));
+        } else {
+          setError('Email hoặc mật khẩu không chính xác. Vui lòng thử lại!');
+        }
       } else {
         setError('Email hoặc mật khẩu không chính xác. Vui lòng thử lại!');
       }

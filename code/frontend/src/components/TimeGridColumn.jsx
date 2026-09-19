@@ -21,6 +21,7 @@ const TimeGridColumn = ({
   onStartPomodoro,
   onQuickCompleteTask,
   onAddTaskOnDate,
+  onSelectTask,
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: day.date,
@@ -76,8 +77,10 @@ const TimeGridColumn = ({
               onDelete={onDeleteTask}
               onStartPomodoro={onStartPomodoro}
               onQuickComplete={onQuickCompleteTask}
+              onSelectTask={onSelectTask}
             />
           ))
+
         ) : (
           <div className="h-32 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center p-2 text-center">
             <span className="text-xl opacity-40">☕</span>

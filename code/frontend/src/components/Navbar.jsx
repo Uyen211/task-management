@@ -70,21 +70,29 @@ const Navbar = ({ onOpenCreateTask }) => {
               Khối chủ đề
             </Link>
 
-            <span
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 cursor-not-allowed"
-              title="Phát triển ở Use Case tiếp theo (UC07)"
+            <Link
+              to="/stats"
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                isActive('/stats')
+                  ? 'bg-[#FF8F7E] text-white shadow-sm'
+                  : 'text-[#2D2424] hover:bg-white/60'
+              }`}
             >
               <BarChart3 className="w-3.5 h-3.5" />
               Thống kê
-            </span>
+            </Link>
 
-            <span
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 cursor-not-allowed"
-              title="Phát triển ở Use Case tiếp theo (UC08)"
+            <Link
+              to="/journal"
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                isActive('/journal')
+                  ? 'bg-[#FF8F7E] text-white shadow-sm'
+                  : 'text-[#2D2424] hover:bg-white/60'
+              }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
               Nhật ký
-            </span>
+            </Link>
           </nav>
         )}
 

@@ -35,7 +35,14 @@ const RegisterPage = () => {
     } catch (err) {
       console.error(err);
       if (err.response && err.response.data && err.response.data.detail) {
-        setError(err.response.data.detail);
+        const detail = err.response.data.detail;
+        if (typeof detail === 'string') {
+          setError(detail);
+        } else if (Array.isArray(detail)) {
+          setError(detail.map((item) => item.msg).join(', '));
+        } else {
+          setError('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin!');
+        }
       } else {
         setError('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin!');
       }

@@ -8,6 +8,8 @@ import ProfilePage from './pages/ProfilePage';
 import TopicGridPage from './pages/TopicGridPage';
 import TopicDetailPage from './pages/TopicDetailPage';
 import WeeklyCalendarPage from './pages/WeeklyCalendarPage';
+import StatsPage from './pages/StatsPage';
+import JournalPage from './pages/JournalPage';
 import CreateTaskModal from './components/CreateTaskModal';
 import CreateTopicModal from './components/CreateTopicModal';
 import api from './services/api';
@@ -104,6 +106,24 @@ const AppContent = () => {
               element={
                 <ProtectedRoute>
                   <TopicDetailPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/stats"
+              element={
+                <ProtectedRoute>
+                  <StatsPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/journal"
+              element={
+                <ProtectedRoute>
+                  <JournalPage />
                 </ProtectedRoute>
               }
             />

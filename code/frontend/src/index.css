@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   :root {
@@ -18,7 +17,7 @@
   }
 
   h1, h2, h3, .font-display {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Lexend', 'Plus Jakarta Sans', sans-serif;
   }
 
   .font-script {

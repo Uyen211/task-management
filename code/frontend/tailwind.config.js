@@ -15,7 +15,7 @@ export default {
         charcoal: "#2D2424",
       },
       fontFamily: {
-        display: ['"Syne"', 'sans-serif'],
+        display: ['"Lexend"', '"Plus Jakarta Sans"', 'sans-serif'],
         script: ['"Playpen Sans"', 'cursive'],
         body: ['"Plus Jakarta Sans"', 'sans-serif'],
       },

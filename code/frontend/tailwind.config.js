@@ -7,18 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0f7ff',
-          100: '#e0effe',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          900: '#1e3a8a',
-        },
-        pomodoro: {
-          work: '#ef4444',
-          break: '#10b981',
-        }
+        canvas: "#FFF4E6",
+        melon: "#FF8F7E",
+        cupid: "#FF5CA8",
+        veranda: "#30D5C8",
+        seafoam: "#7FE7E2",
+        charcoal: "#2D2424",
+      },
+      fontFamily: {
+        display: ['"Lexend"', '"Plus Jakarta Sans"', 'sans-serif'],
+        script: ['"Playpen Sans"', 'cursive'],
+        body: ['"Plus Jakarta Sans"', 'sans-serif'],
+      },
+      borderRadius: {
+        'chunky': '24px',
+        'super': '32px',
+      },
+      boxShadow: {
+        'pop': '4px 4px 0px #2D2424',
+        'pop-lg': '6px 6px 0px #2D2424',
+        'soft-pop': '0 10px 30px -5px rgba(255, 143, 126, 0.25)',
       }
     },
   },

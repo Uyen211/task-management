@@ -3,11 +3,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
+from app.api.v1.auth import router as auth_router
+from app.api.v1.users import router as users_router
+from app.api.v1.topics import router as topics_router
+
 load_dotenv()
 
 app = FastAPI(
-    title="Task Management API",
-    description="Backend API for Roadmap-based Task Management App",
+    title="Task Management System API",
+    description="Backend API for Task Management App with Roadmap, Pomodoro, Streak, and Daily Journal",
     version="1.0.0"
 )
 
@@ -19,16 +23,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router, prefix="/api/v1")
+app.include_router(users_router, prefix="/api/v1")
+app.include_router(topics_router, prefix="/api/v1")
+
 @app.get("/")
 def read_root():
-    return {"status": "online", "message": "Welcome to Task Management API"}
+    return {
+        "status": "online",
+        "service": "Task Management API v1.0",
+        "docs_url": "/docs"
+    }
 
 @app.get("/health")
 def health_check():
     db_url = os.getenv("DATABASE_URL")
     return {
         "status": "healthy",
-        "database_connected": bool(db_url)
+        "database_configured": bool(db_url)
     }
 
 if __name__ == "__main__":

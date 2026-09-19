@@ -3,7 +3,41 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-slate-950 text-slate-100 min-h-screen antialiased font-sans;
+  :root {
+    --color-canvas: #FFF4E6;
+    --color-melon: #FF8F7E;
+    --color-cupid: #FF5CA8;
+    --color-veranda: #30D5C8;
+    --color-charcoal: #2D2424;
   }
+
+  body {
+    background-color: #FFF4E6;
+    color: #2D2424;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Syne', sans-serif;
+  }
+
+  .font-script {
+    font-family: 'Playpen Sans', cursive;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF4E6;
+}
+::-webkit-scrollbar-thumb {
+  background: #FF8F7E;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5CA8;
 }

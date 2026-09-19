@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { X, Plus, Minus, Calendar, Clock, BookOpen, PlusCircle } from 'lucide-react';
 
-const CreateTaskModal = ({ isOpen, onClose, onCreated, topics = [], onOpenCreateTopic, initialTopicId = null }) => {
+const CreateTaskModal = ({ isOpen, onClose, onCreated, topics = [], onOpenCreateTopic, initialTopicId = null, initialDate = null }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [topicId, setTopicId] = useState(initialTopicId || '');
-  const [scheduledDate, setScheduledDate] = useState(new Date().toISOString().split('T')[0]);
+  const [scheduledDate, setScheduledDate] = useState(initialDate || new Date().toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [targetPomodoro, setTargetPomodoro] = useState(1);
@@ -16,9 +16,10 @@ const CreateTaskModal = ({ isOpen, onClose, onCreated, topics = [], onOpenCreate
   useEffect(() => {
     if (isOpen) {
       setTopicId(initialTopicId || '');
+      setScheduledDate(initialDate || new Date().toISOString().split('T')[0]);
       setError('');
     }
-  }, [initialTopicId, isOpen]);
+  }, [initialTopicId, initialDate, isOpen]);
 
 
   if (!isOpen) return null;

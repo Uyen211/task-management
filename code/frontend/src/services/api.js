@@ -36,4 +36,21 @@ api.interceptors.response.use(
   }
 );
 
+// Tasks API
+export const getTasks = (params) => api.get('/tasks', { params });
+export const getTaskDetail = (taskId) => api.get(`/tasks/${taskId}`);
+export const createTask = (data) => api.post('/tasks', data);
+export const updateTask = (taskId, data) => api.put(`/tasks/${taskId}`, data);
+export const deleteTask = (taskId) => api.delete(`/tasks/${taskId}`);
+export const dragDropTask = (taskId, data) => api.patch(`/tasks/${taskId}/drag-drop`, data);
+export const completeTaskEarly = (taskId) => api.post(`/tasks/${taskId}/complete-early`);
+
+// Calendar API
+export const getWeeklyCalendar = (startDate) => api.get('/calendar/weekly', { params: { start_date: startDate } });
+
+// Pomodoro API
+export const startPomodoro = (taskId, durationMinutes = 25) => api.post('/pomodoro/start', { task_id: taskId, duration_minutes: durationMinutes });
+export const completePomodoro = (sessionId) => api.post(`/pomodoro/${sessionId}/complete`);
+export const cancelPomodoro = (sessionId) => api.post(`/pomodoro/${sessionId}/cancel`);
+
 export default api;

@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import TopicGridPage from './pages/TopicGridPage';
 import TopicDetailPage from './pages/TopicDetailPage';
+import WeeklyCalendarPage from './pages/WeeklyCalendarPage';
 import CreateTaskModal from './components/CreateTaskModal';
 import CreateTopicModal from './components/CreateTopicModal';
 import api from './services/api';
@@ -33,6 +34,7 @@ const ProtectedRoute = ({ children }) => {
 const AppContent = () => {
   const { isAuthenticated } = useAuth();
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+  const [createTaskDate, setCreateTaskDate] = useState(null);
   const [isCreateTopicOpen, setIsCreateTopicOpen] = useState(false);
   const [topics, setTopics] = useState([]);
 
@@ -52,15 +54,32 @@ const AppContent = () => {
     fetchTopics();
   }, [isAuthenticated, isCreateTaskOpen]);
 
+  const handleOpenCreateTask = (date = null) => {
+    setCreateTaskDate(date);
+    setIsCreateTaskOpen(true);
+  };
+
   return (
     <div className="min-h-screen pb-12 flex flex-col justify-between">
       <div>
-        <Navbar onOpenCreateTask={() => setIsCreateTaskOpen(true)} />
+        <Navbar onOpenCreateTask={() => handleOpenCreateTask()} />
 
         <main className="mt-4">
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <WeeklyCalendarPage
+                    onOpenCreateTask={handleOpenCreateTask}
+                    topics={topics}
+                  />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/profile"
@@ -75,7 +94,7 @@ const AppContent = () => {
               path="/topics"
               element={
                 <ProtectedRoute>
-                  <TopicGridPage onOpenCreateTask={() => setIsCreateTaskOpen(true)} />
+                  <TopicGridPage onOpenCreateTask={() => handleOpenCreateTask()} />
                 </ProtectedRoute>
               }
             />
@@ -89,7 +108,7 @@ const AppContent = () => {
               }
             />
 
-            <Route path="*" element={<Navigate to="/topics" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>
@@ -105,9 +124,9 @@ const AppContent = () => {
       <CreateTaskModal
         isOpen={isCreateTaskOpen}
         onClose={() => setIsCreateTaskOpen(false)}
+        initialDate={createTaskDate}
         onCreated={() => {
           fetchTopics();
-          // Trigger page reload or refresh if needed
           window.dispatchEvent(new Event('taskCreated'));
         }}
         topics={topics}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { startPomodoro } from '../services/api';
 import { 
   ArrowLeft, 
   Plus, 
@@ -12,9 +12,13 @@ import {
   Calendar, 
   Filter,
   CheckSquare,
-  Square
+  Square,
+  Play
 } from 'lucide-react';
 import CreateTaskModal from '../components/CreateTaskModal';
+import EditTaskModal from '../components/EditTaskModal';
+import DeleteConfirmModal from '../components/DeleteConfirmModal';
+import PomodoroTimerModal from '../components/PomodoroTimerModal';
 
 const TopicDetailPage = () => {
   const { id } = useParams();
@@ -30,6 +34,9 @@ const TopicDetailPage = () => {
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [deletingTask, setDeletingTask] = useState(null);
+  const [activePomodoroSession, setActivePomodoroSession] = useState(null);
+  const [activePomodoroTask, setActivePomodoroTask] = useState(null);
 
   const fetchTopicDetail = async () => {
     try {
@@ -49,18 +56,6 @@ const TopicDetailPage = () => {
     fetchTopicDetail();
   }, [id]);
 
-  const handleDeleteTask = async (taskId, taskTitle) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa công việc "${taskTitle}"?`)) {
-      try {
-        await api.delete(`/tasks/${taskId}`);
-        fetchTopicDetail();
-      } catch (err) {
-        console.error(err);
-        alert('Không thể xóa công việc. Vui lòng thử lại!');
-      }
-    }
-  };
-
   const handleToggleComplete = async (task) => {
     const newStatus = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED';
     try {
@@ -69,6 +64,16 @@ const TopicDetailPage = () => {
     } catch (err) {
       console.error(err);
       alert('Không thể cập nhật trạng thái task!');
+    }
+  };
+
+  const handleStartPomodoro = async (task) => {
+    try {
+      const res = await startPomodoro(task.id, 25);
+      setActivePomodoroSession(res.data);
+      setActivePomodoroTask(task);
+    } catch (err) {
+      console.error('Failed to start pomodoro session:', err);
     }
   };
 
@@ -288,8 +293,26 @@ const TopicDetailPage = () => {
                   {task.status === 'COMPLETED' ? 'Đã xong' : task.status === 'IN_PROGRESS' ? 'Đang làm' : 'Chờ làm'}
                 </span>
 
+                {task.status !== 'COMPLETED' && (
+                  <button
+                    onClick={() => handleStartPomodoro(task)}
+                    className="p-2 rounded-full bg-[#FF8F7E]/10 hover:bg-[#FF8F7E] text-[#FF8F7E] hover:text-white border border-[#2D2424] flex items-center justify-center transition-colors"
+                    title="Bắt đầu Pomodoro"
+                  >
+                    <Play className="w-4 h-4 fill-current" />
+                  </button>
+                )}
+
                 <button
-                  onClick={() => handleDeleteTask(task.id, task.title)}
+                  onClick={() => setEditingTask(task)}
+                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-[#30D5C8] text-gray-700 hover:text-white border border-[#2D2424] flex items-center justify-center transition-colors"
+                  title="Chỉnh sửa công việc"
+                >
+                  <Edit3 className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => setDeletingTask(task)}
                   className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 text-red-600 border border-[#2D2424] flex items-center justify-center transition-colors"
                   title="Xóa công việc"
                 >
@@ -301,12 +324,39 @@ const TopicDetailPage = () => {
         )}
       </div>
 
-      {/* Modal Create Task */}
+      {/* Modals */}
       <CreateTaskModal
         isOpen={isCreateTaskOpen}
         onClose={() => setIsCreateTaskOpen(false)}
         onCreated={() => fetchTopicDetail()}
         initialTopicId={topic.id}
+      />
+
+      <EditTaskModal
+        isOpen={Boolean(editingTask)}
+        onClose={() => setEditingTask(null)}
+        task={editingTask}
+        topics={[topic]}
+        onUpdated={() => fetchTopicDetail()}
+      />
+
+      <DeleteConfirmModal
+        isOpen={Boolean(deletingTask)}
+        onClose={() => setDeletingTask(null)}
+        task={deletingTask}
+        onDeleted={() => fetchTopicDetail()}
+      />
+
+      <PomodoroTimerModal
+        isOpen={Boolean(activePomodoroSession)}
+        onClose={() => {
+          setActivePomodoroSession(null);
+          setActivePomodoroTask(null);
+        }}
+        sessionData={activePomodoroSession}
+        task={activePomodoroTask}
+        onCompleted={() => fetchTopicDetail()}
+        onCancelled={() => fetchTopicDetail()}
       />
     </div>
   );

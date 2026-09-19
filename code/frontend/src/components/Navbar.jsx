@@ -47,9 +47,21 @@ const Navbar = ({ onOpenCreateTask }) => {
         {isAuthenticated && (
           <nav className="hidden md:flex items-center gap-1 bg-[#FFF4E6] p-1 rounded-full border border-[#2D2424]/10">
             <Link
+              to="/"
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                isActive('/') || isActive('/calendar')
+                  ? 'bg-[#FF8F7E] text-white shadow-sm'
+                  : 'text-[#2D2424] hover:bg-white/60'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              Lịch tuần
+            </Link>
+
+            <Link
               to="/topics"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                isActive('/topics')
+                isActive('/topics') || location.pathname.startsWith('/topics/')
                   ? 'bg-[#FF8F7E] text-white shadow-sm'
                   : 'text-[#2D2424] hover:bg-white/60'
               }`}
@@ -60,23 +72,7 @@ const Navbar = ({ onOpenCreateTask }) => {
 
             <span
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 cursor-not-allowed"
-              title="Phát triển ở Use Case tiếp theo"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              Lịch tuần
-            </span>
-
-            <span
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 cursor-not-allowed"
-              title="Phát triển ở Use Case tiếp theo"
-            >
-              <Timer className="w-3.5 h-3.5" />
-              Pomodoro
-            </span>
-
-            <span
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 cursor-not-allowed"
-              title="Phát triển ở Use Case tiếp theo"
+              title="Phát triển ở Use Case tiếp theo (UC07)"
             >
               <BarChart3 className="w-3.5 h-3.5" />
               Thống kê
@@ -84,7 +80,7 @@ const Navbar = ({ onOpenCreateTask }) => {
 
             <span
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 cursor-not-allowed"
-              title="Phát triển ở Use Case tiếp theo"
+              title="Phát triển ở Use Case tiếp theo (UC08)"
             >
               <BookOpen className="w-3.5 h-3.5" />
               Nhật ký

@@ -8,6 +8,8 @@ from app.core.database import get_db
 from app.core.security import get_current_user
 from app.models.models import User, TopicBlock, Task
 from app.schemas.task import TaskCreate, TaskUpdate, TaskResponse
+from app.schemas.calendar import TaskDragDropUpdate
+
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
@@ -216,3 +218,57 @@ def delete_task(
         update_topic_stats(db, topic_id)
 
     return {"message": "Đã xóa công việc thành công."}
+
+@router.patch("/{task_id}/drag-drop", response_model=TaskResponse)
+def drag_drop_task(
+    task_id: UUID,
+    drag_in: "TaskDragDropUpdate",
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    task = db.query(Task).filter(
+        Task.id == task_id,
+        Task.user_id == current_user.id
+    ).first()
+
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Không tìm thấy công việc hoặc bạn không có quyền truy cập."
+        )
+
+    task.scheduled_date = drag_in.scheduled_date
+    task.start_time = drag_in.start_time
+    task.end_time = drag_in.end_time
+
+    db.commit()
+    db.refresh(task)
+
+    return format_task_response(task)
+
+@router.post("/{task_id}/complete-early", response_model=TaskResponse)
+def complete_task_early(
+    task_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    task = db.query(Task).filter(
+        Task.id == task_id,
+        Task.user_id == current_user.id
+    ).first()
+
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Không tìm thấy công việc hoặc bạn không có quyền truy cập."
+        )
+
+    task.status = "COMPLETED"
+    db.commit()
+    db.refresh(task)
+
+    if task.topic_id:
+        update_topic_stats(db, task.topic_id)
+
+    return format_task_response(task)
+
